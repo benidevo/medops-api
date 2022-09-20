@@ -1,0 +1,9 @@
+[tool.black]
+extend-exclude = '''
+/ (
+    | venv/
+)/
+'''
+
+[tool.isort]
+profile = "black"

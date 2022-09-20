@@ -1,0 +1,7 @@
+.idea
+venv
+**/.git
+.gitignore
+.vscode
+README.md
+LICENSE
