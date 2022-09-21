@@ -35,6 +35,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.users",
     "apps.shared",
+    "apps.selfcare",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -192,3 +193,7 @@ SWAGGER_SETTINGS = {
     },
     "USE_SESSION_AUTH": False,
 }
+
+
+MEDIC_API_TOKEN = os.getenv("MEDIC_API_TOKEN", "")
+MEDIC_API_URL = os.getenv("MEDIC_API_URL", "")
