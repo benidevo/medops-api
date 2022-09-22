@@ -26,7 +26,7 @@ show_logs-dev:
 superuser:
 	docker-compose -f docker-compose-prod.yml run --rm api python3 manage.py createsuperuser
 superuser-dev:
-	docker-compose -f docker-compose.yml run --rm app python3 manage.py createsuperuser
+	docker-compose -f docker-compose.yml run --rm api python3 manage.py createsuperuser
 
 flake8:
 	docker-compose -f docker-compose.yml exec api flake8 .

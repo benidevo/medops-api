@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions
 
+from apps.doctors.models import Doctor
 from apps.selfcare.serializers.diagnosis import (
     DiagnosisSerializer,
     GetDiagnosisSerializer,
@@ -26,7 +27,17 @@ class DiagnosisView(generics.GenericAPIView):
 
         diagnosis = self.medic_api.get_diagnosis(data)
 
-        serializer = DiagnosisSerializer(diagnosis, many=True)
+        res = [obj for obj in diagnosis if obj["Issue"]["Accuracy"] >= 50]
+
+        serializer = DiagnosisSerializer(res, many=True)
+
+        specialist = [
+            spec["Name"] for obj in serializer.data for spec in obj["Specialisation"]
+        ]
+
+        # return list of doctors with similar specialisation
+        f = Doctor.objects.filter(specialty__in=specialist)
+        print(f)
 
         return Response(
             success=True,
