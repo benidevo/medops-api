@@ -1,15 +1,7 @@
-import csv
-import os
-import random
-from uuid import uuid4 as uuid
-
-from django.conf import settings
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
 from rest_framework import generics, permissions
 
 from apps.doctors.models import Doctor
-from apps.doctors.serializers import DoctorSerializer, DoctorsUploadSerializer
+from apps.doctors.serializers import DoctorSerializer
 from utils.response import Response
 
 
@@ -112,57 +104,4 @@ class DoctorDetailView(generics.GenericAPIView):
             success=True,
             message="Doctor deleted",
             status_code=200,
-        )
-
-
-class Load(generics.GenericAPIView):
-    serializer_class = None
-    model = Doctor
-
-    def get(self, request):
-        # generate random medical specialty
-        specialty = [
-            "Pulmonology",
-            "Dermatology",
-            "Hematology",
-            "Surgery",
-            "Nephrology",
-            "Anaesthesiology",
-            "Ophthalmology",
-            "Orthopaedics",
-            "Obstetrics and gynaecology",
-            "Psychiatry",
-            "Infectious diseases",
-            "Rehabilitation medicine",
-            "Surgery",
-            "Pediatrics",
-            "Respiratory medicine",
-            "Radiology",
-            "Otolaryngology",
-            "Orthopedics",
-            "Geriatrics",
-            "Vascular surgery",
-            "Neurology",
-            "Dentistry",
-            "Gastroenterology",
-            "Rheumatology",
-            "Endocrinology",
-            "Cardiology",
-            "Urology",
-            "Oncology",
-            "General practice",
-            "Clinical pharmacology",
-            "Internal medicine",
-            "Allergology",
-            "Surgery",
-        ]
-        doctors = self.model.objects.all()
-        for doctor in doctors:
-            doctor.specialty = random.choice(specialty)
-            doctor.save()
-
-        return Response(
-            success=True,
-            message="Doctors loaded",
-            status_code=201,
         )

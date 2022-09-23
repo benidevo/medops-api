@@ -8,8 +8,8 @@ up:
 up-dev:
 	docker-compose -f docker-compose.yml up
 
-# down:
-# 	docker-compose -f docker-compose-prod.yml down
+down:
+	docker-compose -f docker-compose-prod.yml down
 down-dev:
 	docker-compose -f docker-compose.yml down
 
