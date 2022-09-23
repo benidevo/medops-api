@@ -2,6 +2,12 @@
 
 [![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
+## Testing
+
+A test account has been created for testing purposes. The details are as follows:
+
+- email: john@example.com
+- password: TestPassword
 - [Live API](http://ec2-18-217-218-230.us-east-2.compute.amazonaws.com/)
 
 ![Screenshot](image.png?raw=true "MedOps API")
@@ -59,10 +65,3 @@ The API documentation is available on `http://localhost:8000` on your browser.
 2. Users can get a list of symptoms
 3. Users can get a list of diagnosis based on the symptoms they select
 4. Medical doctors are recommended based on the diagnosis
-
-### Testing
-
-A test account has been created for testing purposes. The details are as follows:
-
-- email: john@example.com
-- password: TestPassword
