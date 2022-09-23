@@ -72,11 +72,6 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile", verbose_name=_("User")
     )
-    avatar = models.URLField(
-        blank=True,
-        verbose_name=_("Photo URL"),
-        default="https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=20&m=1288129985&s=612x612&w=0&h=OHfZHfKj0oqIDMl5f_oRqH13MHiB63nUmySYILbWbjE=",  # noqa
-    )
     age = models.PositiveIntegerField(blank=True, null=True, verbose_name=_("Age"))
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created At"))

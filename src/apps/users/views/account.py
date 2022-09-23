@@ -17,7 +17,7 @@ class UserAccountView(generics.GenericAPIView):
         serializer = self.get_serializer(user)
         return Response(
             success=True,
-            message="User account",
+            message="Retrieved user account",
             data=serializer.data,
             status_code=200,
         )

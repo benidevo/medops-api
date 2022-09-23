@@ -46,4 +46,4 @@ isort:
 	docker-compose -f docker-compose.yml exec api isort . --skip /app/env --skip migrations --skip /app/venv
 
 test:
-	docker-compose -f docker-compose.yml run --rm api pytest && docker-compose -f docker-compose.yml down
+	docker-compose -f docker-compose.yml exec api pytest 

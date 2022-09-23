@@ -7,7 +7,7 @@ class Response:
     ):
         return DRFResponse(
             {
-                "success": success,
+                "success": success if not errors else False,
                 "message": message if not errors else "validation error",
                 "data": data,
                 "errors": errors,

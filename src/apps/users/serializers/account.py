@@ -7,7 +7,7 @@ from apps.users.models import Profile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ["id", "avatar", "age", "gender"]
+        fields = ["id", "age", "gender"]
 
 
 class UserAccountSerializer(serializers.ModelSerializer):
@@ -37,7 +37,6 @@ class UserAccountSerializer(serializers.ModelSerializer):
         profile_data = validated_data.pop("profile", None)
         if profile_data:
             profile = instance.profile
-            profile.avatar = profile_data.get("avatar", profile.avatar)
             profile.age = profile_data.get("age", profile.age)
             profile.gender = profile_data.get("gender", profile.gender)
             profile.save()
