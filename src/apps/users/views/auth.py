@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 
+import apps.users.tasks as task
 from apps.users.serializers.auth import (
     ChangePasswordSerializer,
     EmailSerializer,
@@ -29,8 +30,11 @@ class RegisterView(generics.GenericAPIView):
             return Response(success=False, errors=serializer.errors, status_code=400)
 
         data = serializer.validated_data
+        email = data.get("email")
         otp = generate_otp()
         user = self.model.objects.create_user(**data)
+
+        task.send_verification_otp.delay([email], otp)
 
         cache_exp = minutes_to_seconds(5)
         self.cache.set(f"register_{user.id}", otp, cache_exp)
