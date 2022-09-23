@@ -16,4 +16,4 @@ class DiagnosisSerializer(serializers.Serializer):
 
 
 class GetDiagnosisSerializer(serializers.Serializer):
-    symptoms = serializers.ListField(child=serializers.IntegerField())
+    symptom_ids = serializers.ListField(child=serializers.IntegerField())

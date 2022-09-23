@@ -20,7 +20,7 @@ class DiagnosisView(generics.GenericAPIView):
 
     def post(self, request):
         """
-        Get diagnosis report and a list of recommended doctors based on the provided symptoms
+        Get diagnosis report and a list of recommended doctors based on the provided symptoms IDs
         """
         user = request.user
 
@@ -41,11 +41,7 @@ class DiagnosisView(generics.GenericAPIView):
             )
         symptoms = serializer.validated_data["symptoms"]
         yob = user.profile.year_of_birth()
-        gender = ""
-        if user.profile.gender == "M":
-            gender = "male"
-        else:
-            gender = "female"
+        gender = "male" if user.profile.gender == "M" else "female"
 
         diagnosis = self.medic_api.get_diagnosis(gender, yob, symptoms)
 
