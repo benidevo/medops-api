@@ -3,3 +3,5 @@
 flake8==4.0.1
 black==22.6.0
 isort==5.10.1
+
+pytest-django==4.5.2

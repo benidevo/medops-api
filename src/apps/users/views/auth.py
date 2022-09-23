@@ -12,7 +12,7 @@ from apps.users.serializers.auth import (
 )
 from services import Cache
 from utils.response import Response
-from utils.utils import generate_otp
+from utils.utils import generate_otp, minutes_to_seconds
 
 
 class RegisterView(generics.GenericAPIView):
@@ -21,20 +21,25 @@ class RegisterView(generics.GenericAPIView):
     cache = Cache()
 
     def post(self, request):
+        """
+        Register user, send verification OTP to email and return user id
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
-            return Response(errors=serializer.errors, status_code=400)
+            return Response(success=False, errors=serializer.errors, status_code=400)
 
         data = serializer.validated_data
         otp = generate_otp()
         user = self.model.objects.create_user(**data)
 
-        self.cache.set(f"register_{user.id}", otp, 600)  # 10 minutes
+        cache_exp = minutes_to_seconds(5)
+        self.cache.set(f"register_{user.id}", otp, cache_exp)
+
         return Response(
             success=True,
             message="Verify your account",
             data={"user_id": user.id, "otp": otp},
-            status_code=200,
+            status_code=201,
         )
 
 
@@ -44,6 +49,9 @@ class VerifyAccountView(generics.GenericAPIView):
     cache = Cache()
 
     def put(self, request):
+        """
+        Verify user account by validating OTP
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(errors=serializer.errors, status_code=400)
@@ -67,6 +75,9 @@ class ResendVerificationView(generics.GenericAPIView):
     cache = Cache()
 
     def post(self, request):
+        """
+        Resend verification OTP to email and return user id
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(success=False, errors=serializer.errors, status_code=400)
@@ -102,6 +113,9 @@ class LoginView(generics.GenericAPIView):
     cache = Cache()
 
     def post(self, request):
+        """
+        Authenticate user and return access token
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(errors=serializer.errors, status_code=400)
@@ -138,6 +152,9 @@ class ForgotPasswordView(generics.GenericAPIView):
     cache = Cache()
 
     def post(self, request):
+        """
+        Request for password reset, send OTP to email and return user id
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(errors=serializer.errors, status_code=400)
@@ -155,7 +172,8 @@ class ForgotPasswordView(generics.GenericAPIView):
 
         otp = generate_otp()
         self.cache.delete(f"forgot_password_{user.id}")
-        self.cache.set(f"forgot_password_{user.id}", otp, 600)  # 10 minutes
+        cache_exp = minutes_to_seconds(5)
+        self.cache.set(f"forgot_password_{user.id}", otp, cache_exp)
 
         return Response(
             success=True,
@@ -171,6 +189,9 @@ class ResetPasswordView(generics.GenericAPIView):
     cache = Cache()
 
     def post(self, request):
+        """
+        Reset password by validating OTP
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(errors=serializer.errors, status_code=400)
@@ -201,6 +222,9 @@ class ChangePasswordView(generics.GenericAPIView):
     model = get_user_model()
 
     def post(self, request):
+        """
+        Change user password
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(errors=serializer.errors, status_code=400)

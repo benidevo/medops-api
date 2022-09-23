@@ -1,17 +1,17 @@
 build:
 	docker-compose -f docker-compose-prod.yml up --build -d --remove-orphans
 build-dev:
-	docker-compose -f docker-compose.yml build --remove-orphans
+	docker-compose -f docker-compose.yml build
 
 up:
 	docker-compose -f docker-compose-prod.yml up -d
 up-dev:
 	docker-compose -f docker-compose.yml up
 
-down:
-	docker-compose -f docker-compose-prod.yml down
+# down:
+# 	docker-compose -f docker-compose-prod.yml down
 down-dev:
-	docker-compose -f docker-compose.staging.yml down
+	docker-compose -f docker-compose.yml down
 
 down_volumes:
 	docker-compose -f docker-compose-prod.yml down -v
@@ -44,3 +44,6 @@ isort-diff:
 	docker-compose -f docker-compose.yml exec api isort . --diff --skip /app/env --skip migrations --skip /app/venv
 isort:
 	docker-compose -f docker-compose.yml exec api isort . --skip /app/env --skip migrations --skip /app/venv
+
+test:
+	docker-compose -f docker-compose.yml run --rm api pytest && docker-compose -f docker-compose.yml down

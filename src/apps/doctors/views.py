@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 from uuid import uuid4 as uuid
 
 from django.conf import settings
@@ -143,5 +144,56 @@ class DoctorBulkCreateView(generics.GenericAPIView):
         return Response(
             success=True,
             message="Doctors created",
+            status_code=201,
+        )
+
+
+class Load(generics.GenericAPIView):
+    serializer_class = None
+    model = Doctor
+
+    def get(self, request):
+        # generate random medical specialty
+        specialty = [
+            "Pulmonology",
+            "Dermatology",
+            "Hematology",
+            "Nephrology",
+            "Anaesthesiology",
+            "Ophthalmology",
+            "Orthopaedics",
+            "Obstetrics and gynaecology",
+            "Psychiatry",
+            "Infectious diseases",
+            "Rehabilitation medicine",
+            "Surgery",
+            "Pediatrics",
+            "Respiratory medicine",
+            "Radiology",
+            "Otolaryngology",
+            "Orthopedics",
+            "Geriatrics",
+            "Vascular surgery",
+            "Neurology",
+            "Dentistry",
+            "Gastroenterology",
+            "Rheumatology",
+            "Endocrinology",
+            "Cardiology",
+            "Urology",
+            "Oncology",
+            "General practice",
+            "Clinical pharmacology",
+            "Internal medicine",
+            "Allergology",
+        ]
+        doctors = self.model.objects.all()
+        for doctor in doctors:
+            doctor.specialty = random.choice(specialty)
+            doctor.save()
+
+        return Response(
+            success=True,
+            message="Doctors loaded",
             status_code=201,
         )
