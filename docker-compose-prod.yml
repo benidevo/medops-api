@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api: &api
+    build:
+      context: .
+      dockerfile: ./docker/prod/Dockerfile
+    volumes:
+      - ./src:/app
+      - ./docker/prod/entrypoint.sh:/app/entrypoint.sh
+      - medops-prod-static-data:/vol/web
+    ports:
+      - "80:80"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - medops
+
+  db:
+    image: postgres:14.5-alpine3.16
+    restart: always
+    volumes:
+      - medops-prod-db:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - medops
+
+  redis:
+    image: redis:alpine
+    networks:
+      - medops
+
+  celery:
+    <<: *api
+    command: >
+      sh -c "celery -A core worker -l INFO --logfile=celery.log"
+    ports: []
+    volumes:
+      - ./src:/app
+    env_file:
+      - ./.env
+    depends_on:
+      - api
+    networks:
+      - medops
+
+volumes:
+  medops-prod-static-data:
+  medops-prod-db:
+
+networks:
+    medops:
+      driver: bridge

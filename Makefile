@@ -28,9 +28,6 @@ superuser:
 superuser-dev:
 	docker-compose -f docker-compose.yml run --rm api python3 manage.py createsuperuser
 
-flake8:
-	docker-compose -f docker-compose.yml exec api flake8 .
-
 black-check:
 	docker-compose -f docker-compose.yml exec api black --check --exclude=migrations --exclude=/app/venv --exclude=/app/env --exclude=venv --exclude=env .
 black-diff:
@@ -46,4 +43,4 @@ isort:
 	docker-compose -f docker-compose.yml exec api isort . --skip /app/env --skip migrations --skip /app/venv
 
 test:
-	docker-compose -f docker-compose.yml exec api pytest 
+	docker-compose -f docker-compose.yml exec api pytest
