@@ -16,6 +16,4 @@ class DiagnosisSerializer(serializers.Serializer):
 
 
 class GetDiagnosisSerializer(serializers.Serializer):
-    yob = serializers.IntegerField(min_value=1900, max_value=2022)
-    gender = serializers.ChoiceField(choices=["male", "female"])
     symptoms = serializers.ListField(child=serializers.IntegerField())

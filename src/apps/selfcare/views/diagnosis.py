@@ -15,7 +15,22 @@ class DiagnosisView(generics.GenericAPIView):
     serializer_class = GetDiagnosisSerializer
     medic_api = MedicAPI()
 
+    def doctors_serializer(self, doctors):
+        return DoctorSerializer(doctors, many=True)
+
     def post(self, request):
+        """
+        Get diagnosis report and a list of recommended doctors based on the provided symptoms
+        """
+        user = request.user
+
+        if not user.profile.is_complete():
+            return Response(
+                status=False,
+                message="Update your account with your age and gender before requesting diagnosis",
+                status_code=400,
+            )
+
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -24,8 +39,16 @@ class DiagnosisView(generics.GenericAPIView):
                 message="Invalid data",
                 errors=serializer.errors,
             )
-        data = serializer.validated_data
-        diagnosis = self.medic_api.get_diagnosis(data)
+        symptoms = serializer.validated_data["symptoms"]
+        yob = user.profile.year_of_birth()
+        gender = ""
+        if user.profile.gender == "M":
+            gender = "male"
+        else:
+            gender = "female"
+
+        diagnosis = self.medic_api.get_diagnosis(gender, yob, symptoms)
+
         result = [obj for obj in diagnosis if obj["Issue"]["Accuracy"] >= 50]
         serializer = DiagnosisSerializer(result, many=True)
 
@@ -42,6 +65,3 @@ class DiagnosisView(generics.GenericAPIView):
             data=response_data,
             status_code=200,
         )
-
-    def doctors_serializer(self, doctors):
-        return DoctorSerializer(doctors, many=True)

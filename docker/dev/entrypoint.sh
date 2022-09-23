@@ -21,6 +21,8 @@ echo "Initializing DB..."
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput
+python manage.py load_doctors
+python manage.py create_test_user
 status=$?
 if [ $status -eq 0 ]; then
   echo "Starting Gunicorn..."

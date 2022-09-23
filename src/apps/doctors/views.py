@@ -19,6 +19,9 @@ class DoctorView(generics.GenericAPIView):
     model = Doctor
 
     def post(self, request):
+        """
+        Create a doctor
+        """
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(
@@ -36,8 +39,10 @@ class DoctorView(generics.GenericAPIView):
         )
 
     def get(self, request):
+        """Retrieve a list of doctors"""
         queryset = self.model.objects.all()
         serializer = self.get_serializer(queryset, many=True)
+
         return Response(
             success=True,
             message="Doctors retrieved",
@@ -52,6 +57,7 @@ class DoctorDetailView(generics.GenericAPIView):
     model = Doctor
 
     def get(self, request, id):
+        """Retrieve a doctor by id"""
         queryset = self.model.objects.filter(id=id).first()
         if not queryset:
             return Response(
@@ -68,6 +74,7 @@ class DoctorDetailView(generics.GenericAPIView):
         )
 
     def patch(self, request, id):
+        """Update a doctor by id"""
         queryset = self.model.objects.filter(id=id).first()
         if not queryset:
             return Response(
@@ -92,6 +99,7 @@ class DoctorDetailView(generics.GenericAPIView):
         )
 
     def delete(self, request, id):
+        """Delete a doctor by id"""
         queryset = self.model.objects.filter(id=id).first()
         if not queryset:
             return Response(
@@ -107,47 +115,6 @@ class DoctorDetailView(generics.GenericAPIView):
         )
 
 
-class DoctorBulkCreateView(generics.GenericAPIView):
-    serializer_class = DoctorsUploadSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    model = Doctor
-
-    def post(self, request):
-        doc = request.FILES.get("doc")
-        if not doc:
-            return Response(
-                success=False,
-                message="File not found",
-                status_code=400,
-            )
-        unique_id = str(uuid())
-        file_name = f"{unique_id}_{doc.name}"
-        path = default_storage.save(f"tmp/{file_name}", ContentFile(doc.read()))
-        tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-
-        with open(f"{tmp_file}") as file:
-            reader = csv.reader(file)
-            next(reader)  # Advance past the header
-
-            for row in reader:
-                self.model.objects.update_or_create(
-                    first_name=row[1],
-                    last_name=row[2],
-                    email=row[3],
-                    specialty=row[4],
-                    phone=row[5],
-                    medical_code=row[6],
-                    years_of_experience=row[7],
-                )
-
-        os.remove(tmp_file)
-        return Response(
-            success=True,
-            message="Doctors created",
-            status_code=201,
-        )
-
-
 class Load(generics.GenericAPIView):
     serializer_class = None
     model = Doctor
@@ -158,6 +125,7 @@ class Load(generics.GenericAPIView):
             "Pulmonology",
             "Dermatology",
             "Hematology",
+            "Surgery",
             "Nephrology",
             "Anaesthesiology",
             "Ophthalmology",
@@ -186,6 +154,7 @@ class Load(generics.GenericAPIView):
             "Clinical pharmacology",
             "Internal medicine",
             "Allergology",
+            "Surgery",
         ]
         doctors = self.model.objects.all()
         for doctor in doctors:

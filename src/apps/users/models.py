@@ -1,3 +1,4 @@
+from datetime import date
 from uuid import uuid4 as uuid
 
 from django.contrib.auth.base_user import BaseUserManager
@@ -84,3 +85,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return "{}'s Profile".format(self.user.get_full_name)
+
+    def is_complete(self):
+        return True if self.age and self.gender else False
+
+    def year_of_birth(self):
+        year_of_birth = date.today().year - self.age
+        return year_of_birth

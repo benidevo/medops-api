@@ -15,11 +15,7 @@ class MedicAPI:
         response = requests.get(url)
         return response.json()
 
-    def get_diagnosis(self, data):
-        symptoms = data.get("symptoms")
-        gender = data.get("gender")
-        yob = data.get("yob")
-
+    def get_diagnosis(self, gender, yob, symptoms):
         url = "{}/diagnosis?symptoms={}&gender={}&year_of_birth={}&token={}&format=json&language=en-gb".format(
             self.base_url, symptoms, gender, yob, self.token
         )
