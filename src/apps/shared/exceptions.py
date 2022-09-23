@@ -18,13 +18,15 @@ def custom_handler(exc, context):
     if isinstance(exc, exceptions.NotAuthenticated):
         return CustomResponse(
             message="Authentication credentials were not provided.",
-            status=False,
+            success=False,
             status_code=401,
         )
     if isinstance(exc, exceptions.APIException):
         if exc.status_code == 401:
             return CustomResponse(
-                message="Token is invalid or expired", status=False, status_code=401
+                message="Token is invalid or expired",
+                success=False,
+                status_code=401
             )
 
         headers = {}

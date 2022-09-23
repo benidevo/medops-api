@@ -2,6 +2,10 @@
 
 [![Black Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
+- [Live API](http://ec2-18-217-218-230.us-east-2.compute.amazonaws.com/)
+
+![Screenshot](image.png?raw=true "MedOps API")
+
 ## Technologies
 
 - [Python 3.10](https://python.org): Base programming language for development
