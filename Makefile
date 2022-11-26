@@ -44,3 +44,7 @@ isort:
 
 test:
 	docker-compose -f docker-compose.yml exec api pytest
+test-cov:
+	docker-compose -f docker-compose.yml exec api coverage report
+test-cov-html:
+	docker-compose -f docker-compose.yml exec api coverage html

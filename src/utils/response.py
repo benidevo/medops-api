@@ -8,7 +8,7 @@ class Response:
         return DRFResponse(
             {
                 "success": success if not errors else False,
-                "message": message if not errors else "validation error",
+                "message": message if not errors else "Validation error",
                 "data": data,
                 "errors": errors,
                 **kwargs,

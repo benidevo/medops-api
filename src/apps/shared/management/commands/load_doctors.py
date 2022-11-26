@@ -14,6 +14,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         logger.info("Loading doctors from CSV file")
+        if Doctor.objects.count() > 0:
+            logger.info("Doctors already loaded. Aborting.")
+            return
+
         try:
             document = (
                 Path(__file__).resolve().parent.parent.parent.parent.parent
@@ -25,7 +29,7 @@ class Command(BaseCommand):
                 next(reader)
 
                 for row in reader:
-                    Doctor.objects.update_or_create(
+                    Doctor.objects.create(
                         first_name=row[1],
                         last_name=row[2],
                         email=row[3],

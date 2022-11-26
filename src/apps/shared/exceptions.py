@@ -26,6 +26,12 @@ def custom_handler(exc, context):
             return CustomResponse(
                 message="Token is invalid or expired", success=False, status_code=401
             )
+        if exc.status_code == 403:
+            return CustomResponse(
+                message="You do not have permission to perform this action",
+                success=False,
+                status_code=403,
+            )
 
         headers = {}
         if getattr(exc, "auth_header", None):
