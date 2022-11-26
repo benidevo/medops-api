@@ -13,7 +13,7 @@ class UserAccountView(generics.GenericAPIView):
     cache = Cache()
 
     def get(self, request):
-        user = self.model.objects.get(id=request.user.id)
+        user = self.model.objects.filter(id=request.user.id).first()
         serializer = self.get_serializer(user)
         return Response(
             success=True,
@@ -23,7 +23,7 @@ class UserAccountView(generics.GenericAPIView):
         )
 
     def patch(self, request):
-        user = self.model.objects.get(id=request.user.id)
+        user = self.model.objects.filter(id=request.user.id).first()
         serializer = self.get_serializer(user, data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(
@@ -32,9 +32,17 @@ class UserAccountView(generics.GenericAPIView):
                 status_code=400,
             )
         serializer.save()
+
         return Response(
             success=True,
             message="User account updated",
             data=serializer.data,
             status_code=200,
         )
+
+    def delete(self, request):
+        user = self.model.objects.filter(id=request.user.id).first()
+        if user:
+            user.delete()
+
+        return Response(success=True, message="Account deleted", status_code=200)

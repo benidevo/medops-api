@@ -88,3 +88,28 @@ def test_update_user_account():
     assert user.last_name == new_user_data["last_name"]
     assert new_user_data["profile"]["age"] == profile.age
     assert new_user_data["profile"]["gender"] == profile.gender
+
+
+@pytest.mark.django_db
+def test_delete_user_account():
+    """
+    GIVEN that the app is running
+    WHEN /v1/users/account is called with a DELETE request
+    THEN the account of the current user is deleted and a 200 status code is returned
+    """
+    user_data = get_user_data()
+    user_data.update({"is_active": True})
+    user = get_user_model().objects.create_user(**user_data)
+
+    access_token = get_user_token(user_data["email"], user_data["password"])
+
+    response = client.delete(
+        "/v1/users/account", HTTP_AUTHORIZATION=f"Bearer {access_token}"
+    )
+
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data["success"] == True
+    assert response_data["message"] == "Account deleted"
+    assert get_user_model().objects.filter(id=user.id).count() == 0

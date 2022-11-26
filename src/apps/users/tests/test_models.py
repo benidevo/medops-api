@@ -19,6 +19,7 @@ def test_create_user():
     )
     user_id = user.pkid
     profile = Profile.objects.filter(user_id=user_id).first()
+
     assert profile is not None
     assert profile.user_id == user_id
     assert user.is_active == False

@@ -7,7 +7,6 @@ services:
       dockerfile: ./docker/dev/Dockerfile
     volumes:
       - ./src:/app
-      - ./docker/dev/entrypoint.sh:/app/entrypoint.sh
       - medops-dev-static-data:/vol/web
     ports:
       - "8000:8000"

@@ -31,14 +31,15 @@ class UserAccountSerializer(serializers.ModelSerializer):
         }
 
     def update(self, instance, validated_data):
-        print(validated_data)
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
+
         profile_data = validated_data.pop("profile", None)
         if profile_data:
             profile = instance.profile
             profile.age = profile_data.get("age", profile.age)
             profile.gender = profile_data.get("gender", profile.gender)
             profile.save()
+
         instance.save()
         return instance

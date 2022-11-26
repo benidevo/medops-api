@@ -17,7 +17,11 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path("", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-schema-ui"),
+    path(
+        "docs",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="swagger-schema-ui",
+    ),
     path("admin/", admin.site.urls),
     path("v1/users/", include("apps.users.urls")),
     path("v1/selfcare/", include("apps.selfcare.urls")),

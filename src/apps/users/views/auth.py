@@ -100,9 +100,9 @@ class ResendVerificationView(generics.GenericAPIView):
             )
 
         otp = generate_otp()
-        self.cache.delete(f"otp_{user.id}")
+        self.cache.delete(f"register_{user.id}")
         cache_exp = minutes_to_seconds(5)
-        self.cache.set(f"otp_{user.id}", otp, cache_exp)
+        self.cache.set(f"register_{user.id}", otp, cache_exp)
 
         task.send_verification_otp.delay([email], otp)
 
@@ -177,7 +177,6 @@ class ForgotPasswordView(generics.GenericAPIView):
             )
 
         otp = generate_otp()
-        self.cache.delete(f"forgot_password_{user.id}")
         cache_exp = minutes_to_seconds(5)
         self.cache.set(f"forgot_password_{user.id}", otp, cache_exp)
 

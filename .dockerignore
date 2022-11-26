@@ -1,7 +1,9 @@
 .idea
-venv
-**/.git
+venv/
+.git
 .gitignore
+.cache
 .vscode
 README.md
 LICENSE
+*.md

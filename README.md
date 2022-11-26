@@ -8,7 +8,6 @@ A test account has been created for testing purposes. The details are as follows
 
 - email: john@example.com
 - password: TestPassword
-- [Live API](http://ec2-18-217-218-230.us-east-2.compute.amazonaws.com/)
 
 ![Screenshot](image.png?raw=true "MedOps API")
 
