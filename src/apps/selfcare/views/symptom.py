@@ -23,6 +23,11 @@ class SymptomView(generics.GenericAPIView):
             cache_exp = days_to_seconds(2)
             self.cache.set("symptoms", symptoms, cache_exp)
 
+        for symptom in symptoms:
+            id = symptom.pop("ID")
+            name = symptom.pop("Name")
+            symptom.update({"id": id, "name": name})
+
         serializer = self.get_serializer(symptoms, many=True)
 
         return Response(

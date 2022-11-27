@@ -26,9 +26,10 @@ class DiagnosisView(generics.GenericAPIView):
 
         if not user.profile.is_complete():
             return Response(
-                status=False,
-                message="Update your account with your age and gender before requesting diagnosis",
+                success=False,
+                message="Incomplete profile",
                 status_code=400,
+                data=None,
             )
 
         serializer = self.get_serializer(data=request.data)
@@ -36,10 +37,9 @@ class DiagnosisView(generics.GenericAPIView):
             return Response(
                 status_code=400,
                 success=False,
-                message="Invalid data",
                 errors=serializer.errors,
             )
-        symptoms = serializer.validated_data["symptoms"]
+        symptoms = serializer.validated_data["symptom_ids"]
         yob = user.profile.year_of_birth()
         gender = "male" if user.profile.gender == "M" else "female"
 
@@ -52,9 +52,13 @@ class DiagnosisView(generics.GenericAPIView):
             spec["Name"] for obj in serializer.data for spec in obj["Specialisation"]
         ]
 
+        for obj in serializer.data:
+            obj.pop("Specialisation")
+
         doctors = Doctor.objects.filter(specialty__in=specialty)
         doctors_serializer = self.doctors_serializer(doctors)
         response_data = {"result": serializer.data, "doctors": doctors_serializer.data}
+
         return Response(
             success=True,
             message="Diagnosis results",

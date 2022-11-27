@@ -8,6 +8,7 @@ A test account has been created for testing purposes. The details are as follows
 
 - email: john@example.com
 - password: TestPassword
+- The API documentation is available on `http://localhost:8000/docs` on your browser.
 
 ![Screenshot](image.png?raw=true "MedOps API")
 
@@ -55,8 +56,6 @@ Make sure that all the above servers are running before you start exploring the 
 ### MedOps
 
 MedOps is a simple application that allows users to get diagnosis for their symptoms. It also recommends a list of doctors based on the diagnosis.
-
-The API documentation is available on `http://localhost:8000` on your browser.
 
 ### Key Features
 

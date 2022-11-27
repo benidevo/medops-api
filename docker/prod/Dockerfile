@@ -14,7 +14,10 @@ RUN pip install --upgrade pip
 COPY ./requirements ./requirements
 RUN pip install psycopg2-binary --no-binary psycopg2-binary
 RUN pip install -r requirements/prod.txt
+COPY ./docker/prod/entrypoint.sh /entrypoint.sh
 
 COPY . .
 
-CMD ["sh", "entrypoint.sh"]
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]

@@ -1,8 +1,12 @@
+import random
+import string
+
 import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
 from apps.doctors.models import Doctor
+from apps.users.models import Profile
 
 client = APIClient()
 
@@ -31,15 +35,32 @@ def get_admin_user():
 
 
 @pytest.mark.django_db
-def get_user():
+def get_user(profile=None):
+    letters = string.ascii_lowercase
+    result_str = "".join(random.choice(letters) for i in range(8))
+
+    user_email = "{}@example.com".format(result_str)
     regular_user = get_user_model().objects.create_user(
-        email="user@example.com",
+        email=user_email,
         password="password",
         first_name="User",
         last_name="One",
         is_active=True,
     )
+    if profile:
+        regular_user.profile.age = 33
+        regular_user.profile.gender = "M"
+        regular_user.profile.save()
     return regular_user
+
+
+@pytest.mark.django_db
+def get_completed_user_profile():
+    user = get_user(profile=True)
+    # user.profile.age = 30
+    # user.profile.gender = "M"
+    # user.profile.save()
+    return user
 
 
 @pytest.mark.django_db

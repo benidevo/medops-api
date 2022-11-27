@@ -43,8 +43,8 @@ isort:
 	docker-compose -f docker-compose.yml exec api isort . --skip /app/env --skip migrations --skip /app/venv
 
 test:
-	docker-compose -f docker-compose.yml exec api pytest
+	docker-compose -f docker-compose.yml exec api pytest $(TEST_PATH)
 test-cov:
-	docker-compose -f docker-compose.yml exec api coverage report
+	docker-compose -f docker-compose.yml exec api find . -name "*.pyc" -delete && docker-compose -f docker-compose.yml exec api coverage report
 test-cov-html:
-	docker-compose -f docker-compose.yml exec api coverage html
+	docker-compose -f docker-compose.yml exec api find . -name "*.pyc" -delete && docker-compose -f docker-compose.yml exec api coverage html
